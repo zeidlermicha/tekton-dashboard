@@ -17,7 +17,7 @@ import { getStatus } from './status';
 export * from './constants';
 export * from './hooks';
 export { paths, urls } from './router';
-export { getStatus } from './status';
+export { getStatus, getStatusClass } from './status';
 
 export const ALL_NAMESPACES = '*';
 

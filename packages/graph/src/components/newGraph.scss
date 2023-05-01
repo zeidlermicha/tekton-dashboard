@@ -22,15 +22,26 @@ limitations under the License.
   &.card-status-success {
     border-color: $support-02;
   }
-  &.card-status-success-warning {
+  &.card-status-running {
+    border-color: $support-04;
+  }
+  &.card-status-warning {
     border-color: $support-03;
   }
-  &.card-status-failed {
+  &.card-status-error {
     border-color: $support-01;
   }
   &.card-status-unknown {
     border-color: $ui-04;
   }
+  &.card-status-skipped {
+    border-color: $ui-04;
+  }
+  &.card-status-pending {
+    border-color: $ui-04;
+  }
+  padding-top: 4px;
+  padding-bottom: 4px;
 }
 
 .bx--cc--card-node__column {
@@ -49,8 +60,8 @@ limitations under the License.
 
 .status-icon {
   .bx--cc--shape-node__icon & {
-    width: 24px;
-    height: 24px;
+    width: 20px;
+    height: 20px;
   }
 
   &.status-icon-failed {
@@ -61,7 +72,7 @@ limitations under the License.
     fill: $support-02;
   }
 
-  &.status-icon-success-warning {
+  &.status-icon-warning {
     fill: $support-02;
 
     path:nth-child(2) {

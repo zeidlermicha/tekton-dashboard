@@ -29,13 +29,12 @@ export default {
     status: {
       control: { type: 'select' },
       options: [
-        'failed',
+        'error',
         'git',
         'manual',
         'pending',
         'running',
         'success',
-        'success-warning',
         'timer',
         'trigger',
         'warning',
@@ -55,9 +54,9 @@ export default {
   title: 'Node'
 };
 
-export const TaskFailed = {
+export const TaskError = {
   args: {
-    status: 'failed'
+    status: 'error'
   }
 };
 
@@ -79,15 +78,15 @@ export const TaskSuccess = {
   }
 };
 
-export const TaskSuccessWarning = {
-  args: {
-    status: 'success-warning'
-  }
-};
-
 export const TaskWarning = {
   args: {
     status: 'warning'
+  }
+};
+
+export const TaskSkipped = {
+  args: {
+    status: 'skipped'
   }
 };
 

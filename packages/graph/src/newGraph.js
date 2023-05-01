@@ -13,7 +13,7 @@ limitations under the License.
 /* istanbul ignore file */
 
 import { cardHeight, cardWidth, shapeSize } from './constants';
-
+import {getStatusClass} from '@tektoncd/dashboard-utils';
 function addEdge({ edges, source, target }) {
   edges.push({
     id: `${source}::${target}`,
@@ -23,20 +23,25 @@ function addEdge({ edges, source, target }) {
 }
 
 // https://tekton.dev/docs/pipelines/pipelines/#configuring-the-task-execution-order
-export function getDAG({ pipeline, pipelineRun, trigger }) {
+export function getDAG({ pipeline, pipelineRun, trigger, taskRuns }) {
   // TODO: handle taskRun + pipelineRun status
   const edges = [];
   const nodes = [];
   const sourceNodes = [];
   let sinkNodes = new Set(pipeline.spec.tasks.map(({ name }) => name));
+  let statusMap = new Map()
+  if (taskRuns){
+     statusMap = new Map(taskRuns.items.map(taskRun => [taskRun.metadata.labels['tekton.dev/pipelineTask'], getStatusClass(taskRun)]))
 
+  }
   pipeline.spec.tasks.forEach((task, _index) => {
     nodes.push({
       id: task.name,
-      status: pipelineRun ? 'success' : 'unknown',
+      status: taskRuns? statusMap.get(task.name) || 'skipped': 'success',
       title: task.name,
       height: cardHeight,
-      width: cardWidth
+      width: cardWidth,
+      type: 'card'
     });
 
     const taskDependencies = new Set();
@@ -79,7 +84,7 @@ export function getDAG({ pipeline, pipelineRun, trigger }) {
     title: 'Trigger info TBD',
     height: shapeSize,
     width: shapeSize,
-    status: trigger?.type || 'dummy',
+    status: trigger?.type ||'dummy',
     type: 'icon'
   });
 
@@ -96,10 +101,10 @@ export function getDAG({ pipeline, pipelineRun, trigger }) {
   if (finallyTasks.length) {
     nodes.push({
       id: pipelineTasksEndNodeID,
-      title: '?',
+      title: 'Finally',
       height: shapeSize,
       width: shapeSize,
-      status: 'dummy',
+      status: 'finally',
       type: 'icon'
     });
 
@@ -114,10 +119,11 @@ export function getDAG({ pipeline, pipelineRun, trigger }) {
     finallyTasks.forEach(({ name }) => {
       nodes.push({
         id: name,
-        status: pipelineRun ? 'success' : null,
+        status: taskRuns? statusMap[name] || 'skipped': 'success',
         title: name,
         height: cardHeight,
-        width: cardWidth
+        width: cardWidth,
+        type: 'card'
       });
 
       addEdge({
@@ -134,7 +140,7 @@ export function getDAG({ pipeline, pipelineRun, trigger }) {
     title: 'Status TBD',
     height: shapeSize,
     width: shapeSize,
-    status: pipelineRun ? 'success' : null,
+    status: pipelineRun ? getStatusClass(pipelineRun) : null,
     type: 'icon'
   });
 

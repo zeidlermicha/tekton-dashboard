@@ -19,6 +19,7 @@ import { ArrowRightMarker } from '@carbon/charts-react/diagrams/Marker';
 
 import Edge from '../Edge';
 import Node from '../Node/';
+import { shapeSize } from '../../constants';
 
 function buildEdges({ direction, edges }) {
   return edges.map(edge => (
@@ -49,7 +50,9 @@ export default function Graph({
   id,
   nodes,
   edges,
-  type = 'detailed'
+  type = 'detailed',
+  nodePlacement = 'SIMPLE',
+  layering = 'NETWORK_SIMPLEX'
 }) {
   const elk = new ELK({
     defaultLayoutOptions: {
@@ -57,14 +60,14 @@ export default function Graph({
       'elk.direction': direction,
       'elk.edgeRouting': 'ORTHOGONAL',
       'elk.layered.mergeEdges': true, // avoid multiple input / output ports per node
+      'elk.layered.nodePlacement.strategy': nodePlacement,
+      'org.eclipse.elk.layered.layering.strategy': layering,
       // TODO: test
       // 'elk.layered.nodePlacement.bk.fixedAlignment': 'BALANCED', // LEFTDOWN
-      // 'elk.layered.nodePlacement.strategy': 'BRANDES_KOEPF',
       // 'elk.layered.nodePlacement.strategy': 'NETWORK_SIMPLEX',
       // 'crossingMinimization.semiInteractive': true,
       // 'elk.layered.spacing.edgeNodeBetweenLayers': '50',
       // 'elk.layered.unnecessaryBendpoints': true,
-      // 'org.eclipse.elk.layered.layering.strategy': 'INTERACTIVE',
       // 'elk.padding': '[left=50, top=50, right=50, bottom=50]',
       // portConstraints: 'FIXED_ORDER', // this gives correct node order but ignores mergeEdges and has other issues
       // 'elk.layered.considerModelOrder.strategy': 'NODES_AND_EDGES',
@@ -85,11 +88,14 @@ export default function Graph({
   };
 
   useEffect(() => {
+    if (type === 'condensed'){
+    graph.children = graph.children.map(node => {return {...node, width: shapeSize, height: shapeSize, type: 'icon'}})
+  }
     elk
       .layout(graph)
       .then(g => setPositions(g))
       .catch(console.error); // eslint-disable-line no-console
-  }, [direction]);
+  }, [direction,nodePlacement,layering,type]);
 
   if (!positions) {
     return null;

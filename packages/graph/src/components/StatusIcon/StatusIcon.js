@@ -13,40 +13,83 @@ limitations under the License.
 
 import React from 'react';
 import {
-  Misuse16 as FailedIcon,
-  Branch16 as GitIcon,
-  PendingFilled16 as PendingIcon,
-  InProgress16 as RunningIcon,
-  CheckmarkFilled16 as SuccessIcon,
-  CheckmarkFilledWarning16 as SuccessWarningIcon,
-  Timer16 as TimerIcon,
-  Flash16 as TriggerIcon,
-  User16 as UserIcon,
-  WarningAltFilled16 as WarningIcon,
-  Webhook16 as WebhookIcon
+  Branch20 as GitIcon,
+  Timer20 as TimerIcon,
+  Flash20 as TriggerIcon,
+  User20 as UserIcon,
+  Webhook20 as WebhookIcon,
+  CheckmarkFilled20 as CheckmarkFilled,
+  CheckmarkFilledWarning20 as CheckmarkFilledWarning,
+  CheckmarkOutline20 as CheckmarkOutline,
+  CloseFilled20 as CloseFilled,
+  CloseOutline20 as CloseOutline,
+  Time20 as Pending,
+  PendingFilled20 as Skipped,
+  WarningAltFilled20 as WarningFilled,
+  DataDiode20 as Finally,
 } from '@carbon/icons-react';
+import { classNames } from '@tektoncd/dashboard-utils';
 
-// TODO: need 'skipped' status (e.g. when expressions)
-const statusIcons = {
-  dummy: () => <></>, // eslint-disable-line react/jsx-no-useless-fragment
-  failed: FailedIcon,
-  git: GitIcon,
-  manual: UserIcon,
-  pending: PendingIcon,
-  running: RunningIcon,
-  success: SuccessIcon,
-  'success-warning': SuccessWarningIcon,
-  timer: TimerIcon,
-  trigger: TriggerIcon,
-  warning: WarningIcon,
-  webhook: WebhookIcon
+import { Spinner } from '@tektoncd/dashboard-components';
+
+const icons = {
+  
+   inverse: {
+    cancelled: CloseOutline,
+    error: CloseOutline,
+    pending: Pending,
+    running: Spinner,
+    success: CheckmarkOutline,
+    warning: WarningFilled,
+  },
+  normal: {
+    dummy: () => <></>, // eslint-disable-line react/jsx-no-useless-fragment
+    cancelled: CloseFilled,
+    error: CloseFilled,
+    pending: Pending,
+    running: Spinner,
+    success: CheckmarkFilled,
+    warning: CheckmarkFilledWarning,
+    skipped: Skipped,
+    git: GitIcon,
+    manual: UserIcon,
+    timer: TimerIcon,
+    trigger: TriggerIcon,
+    webhook: WebhookIcon,
+    finally : Finally
+  }
 };
 
-export default function StatusIcon({ status, title }) {
-  const Icon = statusIcons[status] || PendingIcon;
-  return (
-    <Icon className={`status-icon status-icon-${status}`}>
-      {title ? <title>{title}</title> : null}
+const statusClassNames = {
+  cancelled: 'tkn--status-icon--cancelled',
+  error: 'tkn--status-icon--error',
+  pending: 'tkn--status-icon--pending',
+  running: 'tkn--status-icon--running',
+  success: 'tkn--status-icon--success',
+  warning: 'tkn--status-icon--warning',
+  skipped: 'tkn--status-icon--skipped'
+};
+
+const typeClassNames = {
+  inverse: 'tkn--status-icon--type-inverse',
+  normal: 'tkn--status-icon--type-normal'
+};
+
+export default function StatusIcon({
+  DefaultIcon,
+  status,
+  title,
+  type = 'normal'
+}) {
+  const Icon = icons[type]?.[status] || DefaultIcon;
+
+  return Icon ? (
+    <Icon
+      className={classNames('tkn--status-icon', typeClassNames[type], {
+        [statusClassNames[status]]: status
+      })}
+    >
+      {title && <title>{title}</title>}
     </Icon>
-  );
+  ) : null;
 }

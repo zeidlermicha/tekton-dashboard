@@ -24,6 +24,7 @@ import {
   example7Pipeline,
   example8,
   finallyPipeline,
+  proALPHA,
   releasePipeline,
   whenExpressionsPipelineRun
 } from '../examples';
@@ -32,12 +33,27 @@ export default {
   component: Graph,
   args: {
     direction: 'RIGHT',
-    id: 'id'
+    nodePlacement: 'NETWORK_SIMPLEX',
+    layering: 'SIMPLE',
+    id: 'id',
+    type: 'detailed'
   },
   argTypes: {
     direction: {
       control: { type: 'inline-radio' },
       options: ['DOWN', 'RIGHT']
+    },
+    nodePlacement: {
+      control: { type: 'inline-radio' },
+      options: ['SIMPLE', 'INTERACTIVE', 'LINEAR_SEGMENTS', 'BRANDES_KOEPF', 'NETWORK_SIMPLEX']
+    },
+    layering: {
+      control: { type: 'inline-radio' },
+      options: ['NETWORK_SIMPLEX', 'LONGEST_PATH', 'LONGEST_PATH_SOURCE', 'COFFMAN_GRAHAM', 'INTERACTIVE', 'STRETCH_WIDTH', 'MIN_WIDTH', 'BF_MODEL_ORDER', 'DF_MODEL_ORDER']
+    },
+    type:{
+      control: { type: 'inline-radio' },
+      options: ['detailed', 'condensed']
     }
   },
   parameters: {
@@ -103,7 +119,7 @@ export const DAG1 = {
   args: {
     ...getDAG({
       pipeline: example7Pipeline,
-      pipelineRun: true,
+      pipelineRun: false,
       trigger: { type: 'manual' }
     })
   }
@@ -113,7 +129,7 @@ export const DAG2Wide = {
   args: {
     ...getDAG({
       pipeline: releasePipeline,
-      pipelineRun: true,
+      pipelineRun: false,
       trigger: { type: 'timer' }
     })
   }
@@ -123,7 +139,7 @@ export const DAG3Finally = {
   args: {
     ...getDAG({
       pipeline: finallyPipeline,
-      pipelineRun: true,
+      pipelineRun: false,
       trigger: { type: 'git' }
     })
   }
@@ -133,7 +149,7 @@ export const DAG4WhenExpressions = {
   args: {
     ...getDAG({
       pipeline: { spec: whenExpressionsPipelineRun.spec.pipelineSpec },
-      pipelineRun: true,
+      pipelineRun: false,
       trigger: { type: 'webhook' }
     })
   }
@@ -143,7 +159,7 @@ export const DAG5Trigger = {
   args: {
     ...getDAG({
       pipeline: example7Pipeline,
-      pipelineRun: true,
+      pipelineRun: false,
       trigger: { type: 'trigger' }
     })
   }

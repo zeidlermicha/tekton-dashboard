@@ -20,13 +20,12 @@ export default {
     status: {
       control: { type: 'select' },
       options: [
-        'failed',
+        'error',
         'git',
         'manual',
         'pending',
         'running',
         'success',
-        'success-warning',
         'timer',
         'trigger',
         'warning',
@@ -42,9 +41,9 @@ export default {
   title: 'StatusIcon'
 };
 
-export const Failed = {
+export const Error = {
   args: {
-    status: 'failed'
+    status: 'error'
   }
 };
 
@@ -78,11 +77,6 @@ export const Success = {
   }
 };
 
-export const SuccessWarning = {
-  args: {
-    status: 'success-warning'
-  }
-};
 
 export const Timer = {
   args: {

@@ -11,6 +11,6 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-export const cardHeight = 50;
-export const cardWidth = 250;
-export const shapeSize = 24;
+export const cardHeight = 30;
+export const cardWidth = 200;
+export const shapeSize = 20;

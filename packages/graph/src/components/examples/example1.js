@@ -16,7 +16,7 @@ function getNodeData({ height, type, width }) {
   return [
     {
       id: 'skaffold-unit-tests',
-      status: 'success-warning',
+      status: 'warning',
       title: 'skaffold-unit-tests',
       height,
       width,
@@ -32,7 +32,7 @@ function getNodeData({ height, type, width }) {
     },
     {
       id: 'build-skaffold-app',
-      status: 'success',
+      status: 'running',
       title: 'build-skaffold-app',
       height,
       width,
@@ -40,7 +40,7 @@ function getNodeData({ height, type, width }) {
     },
     {
       id: 'deploy-app',
-      status: 'success',
+      status: 'skipped',
       title: 'deploy-app',
       height,
       width,
@@ -48,7 +48,7 @@ function getNodeData({ height, type, width }) {
     },
     {
       id: 'deploy-web',
-      status: 'failed',
+      status: 'error',
       title: 'deploy-web',
       height,
       width,
